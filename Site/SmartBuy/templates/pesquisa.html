@@ -1,0 +1,57 @@
+{% extends '_base.html' %}
+{% load currency %}
+{% block main %}
+
+<div class="max-w-7xl mx-auto py-10">
+
+    <h1 class="text-4xl font-black mb-6">
+        Resultado da pesquisa
+    </h1>
+
+    {% if termo %}
+        <p class="text-gray-500 mb-8">
+            Buscando por: <strong>{{ termo }}</strong>
+        </p>
+    {% endif %}
+
+    <div class="grid md:grid-cols-4 gap-6">
+
+        {% for produto in produtos %}
+
+        <a
+            href="{% url 'produto' produto.id %}"
+            class="bg-white rounded-3xl p-4 shadow"
+        >
+
+            <img
+                src="{{ produto.imagem }}"
+                class="w-full h-60 object-cover rounded-2xl"
+            >
+
+            <h2 class="font-bold mt-4">
+                {{ produto.titulo }}
+            </h2>
+
+            <div class="text-2xl font-black mt-3">
+                {{ produto.preco|real }}
+            </div>
+
+        </a>
+
+        {% empty %}
+
+        <div class="col-span-full text-center py-20">
+
+            <h2 class="text-2xl font-bold">
+                Nenhum produto encontrado
+            </h2>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

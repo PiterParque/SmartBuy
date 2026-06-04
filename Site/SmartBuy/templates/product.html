@@ -1,0 +1,340 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load currency %}
+{% block main %}
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <!-- Product Section -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+    <!-- Product Image -->
+    <div class="bg-gray-100 rounded-3xl overflow-hidden shadow-md">
+
+      <img
+        src="{{ produto.imagem }}"
+        alt="{{ produto.titulo }}"
+        class="w-full h-[500px] object-cover hover:scale-105 transition duration-500"
+      />
+
+    </div>
+
+    <!-- Product Info -->
+    <div>
+
+      <!-- Category -->
+      <span class="bg-black text-white text-sm px-4 py-1 rounded-full">
+        Produto
+      </span>
+
+      <!-- Title -->
+      <h1 class="text-2xl font-bold text-gray-900 mt-5">
+        {{ produto.titulo }}
+      </h1>
+
+      <!-- Rating -->
+      <div class="flex items-center gap-2 mt-4">
+
+        <div class="text-yellow-400 text-xl">
+          ★★★★★
+        </div>
+
+        <span class="text-gray-500">
+          {{ produto.avaliacao }}
+        </span>
+
+      </div>
+
+      <!-- Price -->
+      <div class="mt-6 flex items-center gap-4">
+
+        <span class="text-5xl font-bold text-black">
+          {{ produto.preco|real }}
+        </span>
+
+      </div>
+
+      <!-- Description -->
+      <p class="text-gray-600 leading-relaxed mt-6">
+        {{ produto.titulo }}
+      </p>
+
+      <!-- EXPECTATIVA DE PREÇO -->
+      <div class="mt-10">
+
+    <div class="flex items-center justify-between mb-4">
+
+  <h3 class="text-2xl font-bold text-gray-900">
+    Expectativa de Preço
+  </h3>
+
+    <div class="flex items-center gap-3">
+
+        <form method="get">
+
+          <select
+            name="periodo"
+            onchange="this.form.submit()"
+            class="border border-gray-300 rounded-xl px-3 py-2 text-sm"
+          >
+            <option value="7"
+              {% if periodo == "7" %}selected{% endif %}>
+              7 dias
+            </option>
+
+            <option value="30"
+              {% if periodo == "30" %}selected{% endif %}>
+              30 dias
+            </option>
+
+            <option value="90"
+              {% if periodo == "90" %}selected{% endif %}>
+              90 dias
+            </option>
+
+            <option value="all"
+              {% if periodo == "all" %}selected{% endif %}>
+              Todo histórico
+            </option>
+
+          </select>
+
+        </form>
+
+        <span class="text-sm text-green-600 font-semibold">
+          Previsão IA
+        </span>
+
+      </div>
+
+    </div>
+
+        <!-- CARD -->
+        <div class="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm">
+
+          <!-- CHART -->
+          <div class="relative h-64">
+
+            <canvas id="priceChart"></canvas>
+
+          </div>
+
+          <!-- INFO -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+
+            <!-- MENOR -->
+            <div class="bg-gray-100 rounded-2xl p-4">
+
+              <p class="text-sm text-gray-500">
+                Menor Preço
+              </p>
+
+              <h4 class="text-xl font-bold mt-1">
+
+                R$ {{ historico.last.preco }}
+
+              </h4>
+
+            </div>
+
+            <!-- MAIOR -->
+            <div class="bg-gray-100 rounded-2xl p-4">
+
+              <p class="text-sm text-gray-500">
+                Registros
+              </p>
+
+              <h4 class="text-xl font-bold mt-1">
+
+                {{ historico.count }}
+
+              </h4>
+
+            </div>
+
+            <!-- MÉDIA -->
+            <div class="bg-gray-100 rounded-2xl p-4">
+
+              <p class="text-sm text-gray-500">
+                Histórico
+              </p>
+
+              <h4 class="text-xl font-bold mt-1">
+
+                {{ historico|length }} preços
+
+              </h4>
+
+            </div>
+
+            <!-- PREVISÃO -->
+            <div class="bg-gray-100 rounded-2xl p-4">
+
+              <p class="text-sm text-gray-500">
+                Próxima previsão
+              </p>
+
+              <h4 class="text-xl font-bold mt-1 text-green-600">
+
+                {% if previsoes %}
+                  R$ {{ previsoes.0 }}
+                {% else %}
+                  Sem dados
+                {% endif %}
+
+              </h4>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 mt-10">
+
+        <a
+          href="{{ produto.url }}"
+          target="_blank"
+          class="flex-1"
+        >
+
+          <button class="w-full bg-black text-white py-4 rounded-2xl font-semibold text-lg hover:bg-gray-800 transition">
+            Comprar Agora
+          </button>
+
+        </a>
+
+        <a
+          href=""
+          class="flex-1"
+        >
+
+          <button class="w-full border border-black py-4 rounded-2xl font-semibold text-lg hover:bg-black hover:text-white transition">
+            Ver Mais Produtos
+          </button>
+
+        </a>
+
+      </div>
+
+      <!-- Extra Info -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10">
+
+        <div class="bg-gray-100 rounded-2xl p-4 text-center">
+          🚚
+          <p class="font-medium mt-2">
+            Frete Grátis
+          </p>
+        </div>
+
+        <div class="bg-gray-100 rounded-2xl p-4 text-center">
+          🔒
+          <p class="font-medium mt-2">
+            Compra Segura
+          </p>
+        </div>
+
+        <div class="bg-gray-100 rounded-2xl p-4 text-center">
+          ↩️
+          <p class="font-medium mt-2">
+            Troca Fácil
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- CHART JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+  const ctx = document.getElementById('priceChart');
+
+  new Chart(ctx, {
+
+    type: 'line',
+
+    data: {
+
+      labels: [
+
+        {% for item in historico %}
+
+          "{{ item.coletado_em|date:'d/m' }}",
+
+        {% endfor %}
+
+        {% for previsao in previsoes %}
+
+          "Prev {{ forloop.counter }}",
+
+        {% endfor %}
+
+      ],
+
+      datasets: [{
+
+        label: 'Preço',
+
+        data: [
+
+          {% for item in historico %}
+
+            {{ item.preco }},
+
+          {% endfor %}
+
+          {% for previsao in previsoes %}
+
+            {{ previsao }},
+
+          {% endfor %}
+
+        ],
+
+        borderWidth: 3,
+        tension: 0.4,
+        fill: true
+
+      }]
+
+    },
+
+    options: {
+
+      responsive: true,
+
+      plugins: {
+
+        legend: {
+          display: false
+        }
+
+      },
+
+      scales: {
+
+        y: {
+
+          beginAtZero: false
+
+        }
+
+      }
+
+    }
+
+  });
+
+</script>
+
+{% endblock main %}

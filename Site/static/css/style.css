@@ -1,0 +1,13 @@
+/* static/src/input.css */
+
+@import "tailwindcss";
+/* choose one of the following */
+/*npx @tailwindcss/cli -i ./static/css/style.css -o ./static/css/output.css --watch*/
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
