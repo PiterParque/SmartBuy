@@ -1,11 +1,13 @@
 from django.shortcuts import render,get_list_or_404,get_object_or_404,redirect
-from SmartBuy.models import Produto,HistoricoPreco,Product_Type,CotacaoDolar
+from SmartBuy.models import Produto,HistoricoPreco,Product_Type,CotacaoDolar,AlertaPreco
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from django.db.models import Q
 from datetime import timedelta
 from django.utils import timezone
+from django.contrib import messages
+
 
 def index(request):
     produtos = Produto.objects.all().order_by("-criado_em")[:10]
@@ -76,6 +78,8 @@ def produto(request, id):
     historico = historico.order_by(
         "coletado_em"
     )
+    tipo_produto=produto.product_type
+    produtos=Produto.objects.filter(product_type=tipo_produto)
 
     # =========================================
     # DATAFRAME
@@ -183,6 +187,7 @@ def produto(request, id):
 
     context = {
         "produto": produto,
+        "produtos":produtos,
         "historico": historico,
         "previsoes": previsoes,
         "AMAZON": 'amazon_search',
@@ -310,4 +315,41 @@ def produtos_melhores_avaliacoes(request):
             "AMAZON": "amazon_search",
             "MERCADO_LIVRE": "mercadolivre_search",
         }
-    return render(request,"pesquisa.html",context)                                                                                 
+    return render(request,"pesquisa.html",context)
+
+def criar_alerta(request, produto_id):
+
+    if request.method == "POST":
+
+        produto = Produto.objects.get(id=produto_id)
+
+        email = request.POST.get("email")
+
+        limite = timezone.now() - timedelta(days=1)
+
+        alerta_recente = AlertaPreco.objects.filter(
+            produto=produto,
+            email=email,
+            criado_em__gte=limite
+        ).exists()
+
+        if alerta_recente:
+
+            messages.error(
+                request,
+                "Você já criou um alerta para este produto nas últimas 24 horas."
+            )
+
+            return redirect("produto", produto.id)
+
+        AlertaPreco.objects.create(
+            produto=produto,
+            email=email
+        )
+
+        messages.success(
+            request,
+            "Alerta criado com sucesso."
+        )
+
+    return redirect("produto", produto_id)

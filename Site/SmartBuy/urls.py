@@ -11,6 +11,6 @@ urlpatterns = [
     path("loja/<str:loja>",views.loja,name="loja"),
     path("queda/",views.queda_preco,name="queda"),
     path("marcas/<str:marca>",views.marcas,name="marcas"),
-    
+    path("alerta/<int:produto_id>/",views.criar_alerta,name="criar_alerta")
     
 ]

@@ -103,3 +103,19 @@ class HistoricoPreco(models.Model):
 class CotacaoDolar(models.Model):
     valor = models.DecimalField(max_digits=10, decimal_places=4)
     data = models.DateField(auto_now_add=True)
+class AlertaPreco(models.Model):
+
+    produto = models.ForeignKey(
+        Produto,
+        on_delete=models.CASCADE,
+        related_name="alertas"
+    )
+
+    email = models.EmailField()
+
+    criado_em = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        unique_together = ("produto", "email")
