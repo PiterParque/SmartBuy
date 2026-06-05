@@ -159,6 +159,65 @@ function scrollCarousel(carrosselId, direction) {
                 </div>
 
             </div>
+            
+            <div class="relative group">
+
+                    <button
+                        class="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition"
+                    >
+
+                     Marcas
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 transition group-hover:rotate-180"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7"
+                        />
+
+                    </svg>
+
+                </button>
+
+                <div
+                    class="absolute top-full left-0 mt-3 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50"
+                >
+
+                    <div class="p-4 space-y-2">
+
+                        <a href="{% url 'marcas' 'LENOVO' %}"
+                        class="block px-4 py-3 rounded-xl hover:bg-gray-100">
+                            LENOVO
+                        </a>
+
+                        <a href="{% url 'marcas' 'HP' %}"
+                        class="block px-4 py-3 rounded-xl hover:bg-gray-100">
+                            HP
+                        </a>
+
+                        <a href="{% url 'marcas' 'DELL' %}"
+                        class="block px-4 py-3 rounded-xl hover:bg-gray-100">
+                            DELL
+                        </a>
+
+                        <a href="{% url 'marcas' 'POSITIVO' %}"
+                        class="block px-4 py-3 rounded-xl hover:bg-gray-100">
+                            POSITIVO
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+            
+
         </nav>
 
     </div>
@@ -285,7 +344,7 @@ function scrollCarousel(carrosselId, direction) {
         </div>
 
         <button class="text-sm font-bold text-blue-600 hover:underline">
-            Ver Todos
+            <a href="{% url 'melhores_avaliacoes'  %}"> Ver Todos </a>
         </button>
 
     </div>
@@ -403,7 +462,7 @@ function scrollCarousel(carrosselId, direction) {
         </div>
 
         <button class="text-sm font-bold text-blue-600 hover:underline">
-            Ver Todos
+            <a href="{% url 'loja' AMAZON %}"> Ver Todos </a>
         </button>
 
     </div>
@@ -524,7 +583,7 @@ function scrollCarousel(carrosselId, direction) {
         </div>
 
         <button class="text-sm font-bold text-blue-600 hover:underline">
-            Ver Todos
+            <a href="{% url 'loja' MERCADO_LIVRE %}"> Ver Todos </a>
         </button>
 
     </div>

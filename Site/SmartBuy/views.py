@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_list_or_404,get_object_or_404
+from django.shortcuts import render,get_list_or_404,get_object_or_404,redirect
 from SmartBuy.models import Produto,HistoricoPreco,Product_Type,CotacaoDolar
 import pandas as pd
 import numpy as np
@@ -8,7 +8,6 @@ from datetime import timedelta
 from django.utils import timezone
 
 def index(request):
-
     produtos = Produto.objects.all().order_by("-criado_em")[:10]
     produtos_melhores_avaliacoes=Produto.objects.all().order_by("avaliacao")[:5]
     produtos_amazon = (
@@ -177,7 +176,7 @@ def produto(request, id):
             round(float(preco), 2)
             for preco in resultado
         ]
-
+        
     # =========================================
     # CONTEXT
     # =========================================
@@ -288,4 +287,27 @@ def queda_preco(request):
             "AMAZON": "amazon_search",
             "MERCADO_LIVRE": "mercadolivre_search",
         }
-    )                                                                                        
+    )     
+def marcas(request,marca):
+    produtos=[]
+    if marca:
+        produtos=Produto.objects.all().filter(Q(titulo__icontains=marca))
+    else:
+        redirect('index')
+
+    context= {
+            "produtos": produtos,
+            "termo": marca,
+            "AMAZON": "amazon_search",
+            "MERCADO_LIVRE": "mercadolivre_search",
+        }
+    return render(request,"pesquisa.html",context)
+def produtos_melhores_avaliacoes(request):
+    produtos_melhores_avaliacoes=Produto.objects.all().order_by("avaliacao")[:20]
+    context= {
+            "produtos": produtos_melhores_avaliacoes,
+            "termo": 'Melhores Avaliaçoes',
+            "AMAZON": "amazon_search",
+            "MERCADO_LIVRE": "mercadolivre_search",
+        }
+    return render(request,"pesquisa.html",context)                                                                                 
