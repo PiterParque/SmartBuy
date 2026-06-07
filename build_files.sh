@@ -4,9 +4,6 @@ echo "Installing dependencies"
 
 python -m pip install -r requirements.txt
 
-echo "Entrar na pasta site"
-
-cd Site
 echo "Building Tailwind"
 
 python manage.py tailwind build
