@@ -7,6 +7,7 @@ from django.db.models import Q
 from datetime import timedelta
 from django.utils import timezone
 from django.contrib import messages
+from django.core.mail import send_mail
 
 
 def index(request):
@@ -353,3 +354,17 @@ def criar_alerta(request, produto_id):
         )
 
     return redirect("produto", produto_id)
+
+def enviar_alerta(alerta, preco_atual):
+
+    send_mail(
+        subject="Preço caiu!",
+        message=f"""
+O produto {alerta.produto.titulo} caiu de preço.
+
+Novo preço: R$ {preco_atual}
+        """,
+        from_email=None,
+        recipient_list=[alerta.email],
+        fail_silently=False,
+    )

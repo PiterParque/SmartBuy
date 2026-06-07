@@ -4,7 +4,8 @@ from SmartBuy.models import (
     Produto,
     HistoricoPreco,
     Product_Type,
-    CotacaoDolar
+    CotacaoDolar,
+    AlertaPreco
 )
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
@@ -153,14 +154,30 @@ class Command(BaseCommand):
                                 .first()
                             )
 
-                            # =====================================
-                            # VERIFICA ALTERAÇÃO
-                            # =====================================
+                         # =====================================
+                         # VERIFICA ALTERAÇÃO
+                         # =====================================
 
                             if (
                                 not ultimo_historico
                                 or ultimo_historico.preco != preco_decimal
                             ):
+
+                                if (
+                                    ultimo_historico and
+                                    preco_decimal < ultimo_historico.preco
+                                ):
+
+                                    self.stdout.write(
+                                        self.style.SUCCESS(
+                                            f"QUEDA DE PREÇO: {produto_obj.titulo}"
+                                        )
+                                    )
+
+                                    self.enviar_alertas(
+                                        produto_obj,
+                                        preco_decimal
+                                    )
 
                                 HistoricoPreco.objects.create(
                                     produto=produto_obj,
@@ -248,7 +265,25 @@ class Command(BaseCommand):
             )
 
             return None
-            
+    
+    def enviar_alertas(self, produto, preco_atual):
+
+        alertas = AlertaPreco.objects.filter(
+            produto=produto
+        )
+
+        for alerta in alertas:
+
+            send_mail(
+                subject="Preço caiu!",
+                message=(
+                    f"O produto {produto.titulo} "
+                    f"agora custa R$ {preco_atual}"
+                ),
+                from_email=None,
+                recipient_list=[alerta.email],
+                fail_silently=False,
+            )
     # =====================================================
     # BUSCAR PRODUTOS
     # =====================================================

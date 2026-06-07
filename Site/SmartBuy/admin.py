@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Produto, HistoricoPreco
+from .models import Produto, HistoricoPreco,AlertaPreco
 
 
 class HistoricoPrecoInline(admin.TabularInline):
@@ -65,4 +65,29 @@ class HistoricoPrecoAdmin(admin.ModelAdmin):
 
     readonly_fields = (
         'coletado_em',
+    )
+@admin.register(AlertaPreco)
+class AlertaPrecoAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "produto",
+        "email",
+        "criado_em",
+    )
+
+    search_fields = (
+        "email",
+        "produto__titulo",
+    )
+
+    list_filter = (
+        "criado_em",
+    )
+
+    readonly_fields = (
+        "criado_em",
+    )
+
+    autocomplete_fields = (
+        "produto",
     )
