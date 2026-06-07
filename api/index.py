@@ -1,7 +1,16 @@
 import os
-from django.core.wsgi import get_wsgi_application
+import sys
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Site.Site.settings")
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+sys.path.insert(0, os.path.join(BASE_DIR, "Site"))
+
+os.environ.setdefault(
+    "DJANGO_SETTINGS_MODULE",
+    "Site.settings"
+)
+
+from django.core.wsgi import get_wsgi_application
 
 application = get_wsgi_application()
 app=application
