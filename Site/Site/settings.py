@@ -79,8 +79,7 @@ WSGI_APPLICATION = "Site.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 #
-#export USERNAME='Nicolas_RMC5r'
-#export PASSWORD='3VFArce0Ex=k+X11'
+
 DATABASE_URL=os.getenv("DATABASE_URL")
 
 DATABASES = {
@@ -100,10 +99,7 @@ MERCADO_PAGO_ACCESS_TOKEN = os.getenv(
     "MERCADO_PAGO_ACCESS_TOKEN"
 )
 
-# Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
-#Public Key =APP_USR-5a21c3c7-1ec4-4c69-9ed8-067249250836
-#Access Token= APP_USR-3785934364121618-051108-fd72fb87d5f9018693d48a7ee57b82fc-3392229803
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
